@@ -14,8 +14,10 @@
       placeholder="Put ASIN"
       :disabled="loading"
     />
-    <button class="btn-bw-hover mt-2 md:ml-2 md:mt-0" :disabled="loading" @click="search">Search</button>
-    <button class="btn-bw-hover md:ml-2" :disabled="loading" @click="ermitteln.search('')">Reset</button>
+    <div class="mb-2 mt-2 flex flex-row gap-2 md:mb-0 md:mt-0">
+      <button class="btn-bw-hover w-full md:ml-2" :disabled="loading" @click="search">Search</button>
+      <button class="btn-bw-hover w-full md:ml-2" :disabled="loading" @click="ermitteln.search('')">Reset</button>
+    </div>
   </div>
 </template>
 
