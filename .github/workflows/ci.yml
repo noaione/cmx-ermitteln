@@ -1,0 +1,50 @@
+name: CI
+on:
+  push:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+  PKG_CONFIG_SYSROOT_DIR: /
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          # GNU Linux (x64)
+          - [ubuntu-latest, x86_64-unknown-linux-gnu]
+          # Windows 10 (x64)
+          - [windows-latest, x86_64-pc-windows-msvc]
+      fail-fast: false
+    
+    runs-on: ${{ matrix.os[0] }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Rust Target
+        run: |
+          rustup target add ${{ matrix.os[1] }}
+
+      - name: Setup rust cache
+        uses: Swatinem/rust-cache@3cf7f8cc28d1b4e7d01e3783be10a97d55d483c8
+        with:
+          prefix-key: "${{ runner.os }}-${{ matrix.os[1] }}-ermitteln-build-rust"
+
+      - name: Build
+        run: |
+          cargo build --release --verbose --all --target ${{ matrix.os[1] }}
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aufnehmen-${{ matrix.os[1] }}
+          path: |
+            target/${{ matrix.os[1] }}/release/aufnehmen*

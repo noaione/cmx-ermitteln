@@ -16,3 +16,6 @@ tokio = { version = "1", features = ["full"] }
 dotenv = "0.15.0"
 image_hasher.workspace = true
 image.workspace = true
+clap = { version = "*", features = ["derive"] }
+base64 = "*"
+sha2 = "*"

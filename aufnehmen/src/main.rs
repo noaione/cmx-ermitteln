@@ -1,7 +1,22 @@
+use std::path::PathBuf;
+
+use clap::Parser;
 use dotenv::dotenv;
 use image_hasher::{HashAlg, HasherConfig};
 use meilisearch_sdk::client::Client;
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
+
+use crate::cli::{AufnehmenCli, AufnehmenCommands};
+
+mod cli;
+
+const BLACKLISTED_HASH: [&str; 4] = [
+    "f91cfdf3fcbfd1012c04c54b00cde53590d0936c39889964a5a452518de77d57", // Black CMX Placeholder
+    "dc4b594e62e54ab824c28d2686fae8a8b0397f9bbd04de4d452b9b69452ca21e", // White CMX Placeholder
+    "b7c5349d51aadf28a885de88bad7cc44f901f6401519f728c828700f4564d135", // DC Placeholder
+    "5e7e7b0b37ba5c74b49f78ab913bd1b9757e68dfe73a2a3f7f27438b331df05d", // DC Placeholder (variant)
+];
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct ErmittelnHash {
@@ -9,7 +24,8 @@ struct ErmittelnHash {
     hash: String,
 }
 
-pub fn hash_image(image: &[u8]) -> String {
+pub fn hash_image(image: &[u8]) -> (String, String) {
+    let sha2_hash = <Sha256 as Digest>::digest(image);
     let hasher = HasherConfig::new()
         .hash_alg(HashAlg::DoubleGradient)
         .to_hasher();
@@ -18,26 +34,27 @@ pub fn hash_image(image: &[u8]) -> String {
 
     let hash = hasher.hash_image(&img);
 
-    hash.to_base64()
+    (hash.to_base64(), format!("{:x}", sha2_hash))
 }
 
-#[tokio::main]
-async fn main() {
-    dotenv().ok();
-
-    let meili_url = std::env::var("MEILI_URL").expect("MEILI_URL is not set.");
-    let meili_key = std::env::var("MEILI_KEY").expect("MEILI_KEY is not set.");
-
-    // get first argument for a folder
-    let folder = std::env::args().nth(1).expect("No folder given.");
-
+async fn ingest_handler(
+    input_folder: PathBuf,
+    chunk_size: usize,
+    start_id: usize,
+    meili_url: String,
+    meili_key: String,
+) {
     println!("Starting aufnehmen indexer...");
     // get all files in folder
-    let files = std::fs::read_dir(folder).expect("Unable to read folder.");
+    let files = std::fs::read_dir(input_folder).expect("Unable to read folder.");
     let jpeg_images = files
         .filter_map(|file| {
             let file = file.ok()?;
             let path = file.path();
+            let id_num = path.file_stem()?.to_str()?.parse::<usize>().ok()?;
+            if id_num < start_id {
+                return None;
+            }
             let extension = path.extension()?;
             if extension == "jpg" || extension == "jpeg" {
                 Some(path)
@@ -61,11 +78,17 @@ async fn main() {
 
     // chunk the images into 1000 images per chunk
     println!("Hashing a total of {} images...", jpeg_images.len());
-    let chunks = jpeg_images.chunks(1000);
-    for chunk in chunks {
+    let chunks = jpeg_images.chunks(chunk_size);
+    let total_chunk = chunks.len();
+    for (idx, chunk) in chunks.enumerate() {
         // hash images
         let mut hashes = vec![];
-        println!("  Hashing {} images...", chunk.len());
+        println!(
+            "  Hashing {} images... ({}/{} chunks)",
+            chunk.len(),
+            idx + 1,
+            total_chunk
+        );
         for image_path in chunk {
             let filename = image_path.file_stem().unwrap().to_str().unwrap();
             let read_image = tokio::fs::read(image_path)
@@ -73,7 +96,12 @@ async fn main() {
                 .expect("Failed to read image.");
 
             let hash = tokio::task::spawn_blocking(move || hash_image(&read_image)).await;
-            let hash = hash.expect("Failed to hash image.");
+            let (hash, sha2_hash) = hash.expect("Failed to hash image.");
+
+            if BLACKLISTED_HASH.contains(&&*sha2_hash) {
+                println!("    Skipping blacklisted image: {}", filename);
+                continue;
+            }
 
             hashes.push(ErmittelnHash {
                 id: filename.parse().unwrap(),
@@ -98,4 +126,49 @@ async fn main() {
         println!("    Waiting for indexing to finish...");
         let _ = task.wait_for_completion(&client, None, None).await;
     }
+}
+
+#[tokio::main]
+async fn main() {
+    dotenv().ok();
+
+    // For some god know what reason, `clap` + rustc_lint will show this as unreachable code.
+    let _cli = AufnehmenCli::parse();
+
+    match _cli.command {
+        AufnehmenCommands::Hash { input } => {
+            let image = tokio::fs::read(input).await.expect("Failed to read image.");
+            let hash = tokio::task::spawn_blocking(move || hash_image(&image)).await;
+            let (hash, b64_hash) = hash.expect("Failed to hash image.");
+            println!("Hash: {}", hash);
+            println!("SHA256 Hash: {}", b64_hash);
+        }
+        AufnehmenCommands::Ingest {
+            input,
+            chunk_size,
+            start_id,
+        } => {
+            if chunk_size > 1000 {
+                println!("Chunk size cannot be greater than 1000!");
+                std::process::exit(1);
+            }
+
+            let meili_url = match std::env::var("MEILI_URL") {
+                Ok(url) => url,
+                Err(_) => {
+                    println!("MEILI_URL env is not set!");
+                    std::process::exit(1);
+                }
+            };
+            let meili_key = match std::env::var("MEILI_KEY") {
+                Ok(key) => key,
+                Err(_) => {
+                    println!("MEILI_KEY env is not set!");
+                    std::process::exit(1);
+                }
+            };
+
+            ingest_handler(input, chunk_size, start_id, meili_url, meili_key).await;
+        }
+    };
 }
