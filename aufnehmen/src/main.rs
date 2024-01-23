@@ -52,7 +52,7 @@ async fn ingest_handler(
     println!("Starting aufnehmen indexer...");
     // get all files in folder
     let files = std::fs::read_dir(input_folder).expect("Unable to read folder.");
-    let jpeg_images = files
+    let mut jpeg_images = files
         .filter_map(|file| {
             let file = file.ok()?;
             let path = file.path();
@@ -77,6 +77,27 @@ async fn ingest_handler(
             }
         })
         .collect::<Vec<_>>();
+
+    // ascending sort
+    jpeg_images.sort_by(|a, b| {
+        let a = a
+            .file_stem()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .parse::<usize>()
+            .unwrap();
+        let b = b
+            .file_stem()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .parse::<usize>()
+            .unwrap();
+        a.cmp(&b)
+    });
+    // reverse to descending
+    jpeg_images.reverse();
 
     println!(
         "Found {} images, connecting to Meilisearch...",
