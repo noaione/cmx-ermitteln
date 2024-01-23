@@ -49,11 +49,38 @@ export const useErmitteln = defineStore("ermitteln", () => {
     }
   }
 
+  async function getStats() {
+    try {
+      const url = new URL(runtimeConfig.public.meiliHost);
+
+      url.pathname = "/indexes/ermitteln-images/stats";
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${runtimeConfig.public.meiliKey}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`MeiliSearch returned ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      return json;
+    } catch (error_) {
+      error.value = error_ instanceof Error ? error_ : new Error("Unknown error");
+    }
+  }
+
   const searchDebounced = debounce(search, 500);
 
   return {
     search,
     searchDebounced,
+    getStats,
     loading,
     data,
     error,

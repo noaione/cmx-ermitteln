@@ -1,6 +1,9 @@
 <template>
   <div class="flex w-full flex-col">
     <SearchBox />
+    <p v-if="docCount !== undefined" class="mt-2 text-center text-sm text-gray-300">
+      Serving {{ docCount.toLocaleString() }} images
+    </p>
     <div class="mt-6 flex w-full flex-col gap-4">
       <div class="flex w-full flex-col">
         <p v-if="ermitteln.error" class="mt-4 text-center text-lg text-red-400">
@@ -27,7 +30,13 @@
 <script setup lang="ts">
 const ermitteln = useErmitteln();
 
+const docCount = ref<number>();
+
 onMounted(async () => {
   await ermitteln.search("");
+
+  const stats = await ermitteln.getStats();
+
+  docCount.value = stats.numberOfDocuments;
 });
 </script>
