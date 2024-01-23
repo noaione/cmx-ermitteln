@@ -107,10 +107,11 @@ async fn ingest_handler(
             let filename = image_path.file_stem().unwrap().to_str().unwrap();
             let read_image = tokio::fs::read(image_path)
                 .await
-                .expect("Failed to read image.");
+                .unwrap_or_else(|_| panic!("Failed to read image: {}", filename));
 
             let hash = tokio::task::spawn_blocking(move || hash_image(&read_image)).await;
-            let (hash, sha2_hash) = hash.expect("Failed to hash image.");
+            let (hash, sha2_hash) =
+                hash.unwrap_or_else(|_| panic!("Failed to hash image: {}", filename));
 
             if BLACKLISTED_HASH.contains(&&*sha2_hash) {
                 println!("    Skipping blacklisted image: {}", filename);
