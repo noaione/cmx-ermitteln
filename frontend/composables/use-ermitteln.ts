@@ -71,7 +71,57 @@ export const useErmitteln = defineStore("ermitteln", () => {
 
       return json;
     } catch (error_) {
-      error.value = error_ instanceof Error ? error_ : new Error("Unknown error");
+      console.error("Failed to get stats", error_);
+
+      throw error_;
+    }
+  }
+
+  async function getOwnedRange() {
+    try {
+      const url = new URL(runtimeConfig.public.meiliHost);
+
+      url.pathname = "/multi-search";
+
+      const queries = [
+        {
+          indexUid: "ermitteln-images",
+          limit: 1,
+          sort: ["id:asc"],
+        },
+        {
+          indexUid: "ermitteln-images",
+          limit: 1,
+          sort: ["id:desc"],
+        },
+      ];
+
+      const response = await fetch(url, {
+        body: JSON.stringify({ queries }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${runtimeConfig.public.meiliKey}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`MeiliSearch returned ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      const first = json.results[0].hits[0];
+      const last = json.results[1].hits[0];
+
+      return {
+        first,
+        last,
+      };
+    } catch (error_) {
+      console.error("Failed to get stats", error_);
+
+      throw error_;
     }
   }
 
@@ -81,6 +131,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
     search,
     searchDebounced,
     getStats,
+    getOwnedRange,
     loading,
     data,
     error,
