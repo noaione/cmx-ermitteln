@@ -2,7 +2,7 @@
   <div class="flex w-full flex-row">
     <div class="upload-area mr-2 mt-1.5">
       <label for="img-upload" class="upload-btn" :aria-disabled="loading">Upload</label>
-      <input id="img-upload" type="file" accept="image/jpeg" :onchange="uploadImage" :disabled="loading" />
+      <input id="img-upload" type="file" accept="image/jpeg" :disabled="loading" @change="uploadImage" />
     </div>
 
     <input
@@ -12,6 +12,7 @@
       class="w-full rounded-md bg-gray-700 px-4 py-2 text-white disabled:opacity-80"
       name="asin"
       placeholder="Put ASIN"
+      :disabled="loading"
     />
     <button
       class="ml-2 rounded-md bg-gray-700 px-4 py-2 text-white transition hover:opacity-80 disabled:opacity-80"
@@ -32,8 +33,6 @@
 
 <script setup lang="ts">
 import { hash_image } from "ermitteln-wasm";
-
-type HandleFileInput = Event & { currentTarget: EventTarget & HTMLInputElement };
 
 const loading = ref(false);
 const ermitteln = useErmitteln();
@@ -77,14 +76,23 @@ async function getASINImageHash(asin: string): Promise<[boolean, string]> {
   }
 }
 
-function uploadImage(ev: HandleFileInput) {
+function uploadImage(ev: Event) {
+  if (!(ev.currentTarget instanceof HTMLInputElement)) return;
+
   const files = ev.currentTarget.files;
 
-  if (!files) return;
+  if (!files) {
+    return;
+  }
 
   const file = files[0];
 
   if (file.type !== "image/jpeg") {
+    toasts.toast({
+      message: "Not a JPEG image!",
+      type: "warning",
+    });
+
     return;
   }
 
@@ -99,6 +107,11 @@ function uploadImage(ev: HandleFileInput) {
       const imageHash = hash_image(bytes);
 
       loading.value = false;
+
+      // empty the input
+      if (ev.currentTarget instanceof HTMLInputElement) {
+        ev.currentTarget.value = ev.currentTarget.defaultValue;
+      }
 
       ermitteln.search(imageHash);
     })
@@ -117,6 +130,10 @@ function uploadImage(ev: HandleFileInput) {
           type: "error",
           duration: 5000,
         });
+      }
+
+      if (ev.currentTarget instanceof HTMLInputElement) {
+        ev.currentTarget.value = ev.currentTarget.defaultValue;
       }
 
       loading.value = false;
