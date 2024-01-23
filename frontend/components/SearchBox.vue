@@ -38,6 +38,7 @@ type HandleFileInput = Event & { currentTarget: EventTarget & HTMLInputElement }
 const loading = ref(false);
 const ermitteln = useErmitteln();
 const asinQuery = ref("");
+const toasts = useToast();
 
 async function getASINImageHash(asin: string): Promise<[boolean, string]> {
   const buildUrl = `https://m.media-amazon.com/images/P/${asin}.01._SCRM_.jpg`;
@@ -47,21 +48,32 @@ async function getASINImageHash(asin: string): Promise<[boolean, string]> {
   try {
     const response = await fetch(buildUrl);
     const blob = await response.blob();
+
+    if (blob.type !== "image/jpeg") {
+      return [false, "Not a JPEG image!"];
+    }
+
     // convert to Uint8Array
     const arrayBuffer = await blob.arrayBuffer();
     const bytes = new Uint8Array(arrayBuffer);
 
-    const imageHash = hash_image(bytes);
+    try {
+      const imageHash = hash_image(bytes);
 
-    loading.value = false;
+      loading.value = false;
 
-    return [true, imageHash];
+      return [true, imageHash];
+    } catch {
+      loading.value = false;
+
+      return [false, "Error while hashing image!"];
+    }
   } catch (error_) {
     console.error(error_);
 
     loading.value = false;
 
-    return [false, "An unknown error occured!"];
+    return [false, "Please see console for error!"];
   }
 }
 
@@ -78,29 +90,37 @@ function uploadImage(ev: HandleFileInput) {
 
   console.log("Loading", file);
 
-  const reader = new FileReader();
-
-  reader.addEventListener("load", async () => {
-    const hash = hash_image(new Uint8Array(reader.result as ArrayBuffer));
-
-    await ermitteln.search(hash);
-
-    loading.value = false;
-  });
-
-  reader.addEventListener("error", () => {
-    if (reader.error) {
-      // modal
-    } else {
-      // modal
-    }
-
-    loading.value = false;
-  });
-
   loading.value = true;
-  // eslint-disable-next-line unicorn/prefer-blob-reading-methods
-  reader.readAsArrayBuffer(file);
+  file
+    .arrayBuffer()
+    .then((buffer) => {
+      const bytes = new Uint8Array(buffer);
+
+      const imageHash = hash_image(bytes);
+
+      loading.value = false;
+
+      ermitteln.search(imageHash);
+    })
+    .catch((error) => {
+      if (error instanceof Error) {
+        toasts.toast({
+          title: "Error",
+          message: error.message,
+          type: "error",
+          duration: 5000,
+        });
+      } else {
+        toasts.toast({
+          title: "Error",
+          message: "An unknown error occured!",
+          type: "error",
+          duration: 5000,
+        });
+      }
+
+      loading.value = false;
+    });
 }
 
 async function search() {
@@ -111,7 +131,12 @@ async function search() {
   const [success, hashData] = await getASINImageHash(asinQuery.value);
 
   if (!success) {
-    ermitteln.error = new Error(hashData);
+    toasts.toast({
+      title: "Error",
+      message: hashData,
+      type: "error",
+      duration: 5000,
+    });
 
     return;
   }

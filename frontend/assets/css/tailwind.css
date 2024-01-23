@@ -5,3 +5,95 @@
 body {
     @apply bg-gray-900 text-white;
 }
+
+.toast-hitagi {
+    @apply border-2 bg-black px-2 py-2;
+}
+
+.toast-bord-gray {
+    @apply border-gray-500;
+}
+
+.toast-bord-red {
+@apply border-red-500;
+}
+
+.toast-bord-yellow {
+@apply border-yellow-500;
+}
+
+.toast-bord-green {
+@apply border-green-500;
+}
+
+.toast-bord-blue {
+@apply border-blue-500;
+}
+
+.toast-bord-indigo {
+@apply border-indigo-500;
+}
+
+.toast-bord-purple {
+@apply border-purple-500;
+}
+
+.toast-bord-pink {
+@apply border-pink-500;
+}
+
+.toast-bord-orange {
+@apply border-orange-500;
+}
+
+.toast-bord-cyan {
+@apply border-cyan-500;
+}
+
+.toast-bord-emerald {
+@apply border-emerald-500;
+}
+
+.toast-loader-gray {
+@apply bg-gray-500;
+}
+
+.toast-loader-red {
+@apply bg-red-500;
+}
+
+.toast-loader-yellow {
+@apply bg-yellow-500;
+}
+
+.toast-loader-green {
+@apply bg-green-500;
+}
+
+.toast-loader-blue {
+@apply bg-blue-500;
+}
+
+.toast-loader-indigo {
+@apply bg-indigo-500;
+}
+
+.toast-loader-purple {
+@apply bg-purple-500;
+}
+
+.toast-loader-pink {
+@apply bg-pink-500;
+}
+
+.toast-loader-orange {
+@apply bg-orange-500;
+}
+
+.toast-loader-cyan {
+@apply bg-cyan-500;
+}
+
+.toast-loader-emerald {
+@apply bg-emerald-500;
+}
