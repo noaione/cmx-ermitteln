@@ -5,12 +5,14 @@ A quick reverse image lookup using pHash (DCT) algorithm.
 Powered by Meilisearch.
 
 > [!NOTE]
-> I need help ingesting some missing IDs, please contact @noaione in Discord so I can give you
+> I need help ingesting some missing IDs, please contact **@noaione** in Discord so I can give you
 > the ingestion key for my Meilisearch instance.
 
 ### Public version
 
-https://ermitteln.n4o.xyz (WIP)
+https://ermitteln.ihateani.me
+
+Currently in the processing of ingesting old IDs (below `102xxxx`)
 
 ## Requirements
 1. Node 18+
