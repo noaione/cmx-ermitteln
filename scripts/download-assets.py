@@ -10,8 +10,8 @@ os.chdir(CURRENT_DIR)
 ASSETS_PATH = f"https://github.com/noaione/cmx-ermitteln/releases/download/wasm-{VERSION}/ermitteln-wasm-pkg.zip"
 
 print(f"Downloading assets from {ASSETS_PATH}...")
-# Use wget?
-os.system(f"wget {ASSETS_PATH} -O ermitteln-wasm-pkg.zip")
+# Use curl
+os.system(f"curl -L {ASSETS_PATH} -o ermitteln-wasm-pkg.zip")
 
 # Open the file in read mode
 print("Opening zip file...")
