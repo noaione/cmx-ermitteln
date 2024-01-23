@@ -41,6 +41,7 @@ async fn ingest_handler(
     input_folder: PathBuf,
     chunk_size: usize,
     start_id: usize,
+    end_id: Option<usize>,
     meili_url: String,
     meili_key: String,
 ) {
@@ -52,9 +53,18 @@ async fn ingest_handler(
             let file = file.ok()?;
             let path = file.path();
             let id_num = path.file_stem()?.to_str()?.parse::<usize>().ok()?;
+            // if id_num is less than start_id, skip
             if id_num < start_id {
                 return None;
             }
+            // if end_id is set, and id_num is greater than end_id, skip
+            if let Some(end_id) = end_id {
+                if id_num > end_id {
+                    return None;
+                }
+            }
+
+            // check extension (jpg/jpeg only)
             let extension = path.extension()?;
             if extension == "jpg" || extension == "jpeg" {
                 Some(path)
@@ -147,6 +157,7 @@ async fn main() {
             input,
             chunk_size,
             start_id,
+            end_id,
         } => {
             if chunk_size > 1000 {
                 println!("Chunk size cannot be greater than 1000!");
@@ -168,7 +179,7 @@ async fn main() {
                 }
             };
 
-            ingest_handler(input, chunk_size, start_id, meili_url, meili_key).await;
+            ingest_handler(input, chunk_size, start_id, end_id, meili_url, meili_key).await;
         }
     };
 }

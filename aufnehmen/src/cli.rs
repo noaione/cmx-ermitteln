@@ -35,6 +35,9 @@ pub(crate) enum AufnehmenCommands {
         /// Starting ID
         #[arg(short, long, default_value = "1")]
         start_id: usize,
+        /// End at ID
+        #[arg(short, long)]
+        end_id: Option<usize>,
     },
 }
 
