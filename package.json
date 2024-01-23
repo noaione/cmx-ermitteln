@@ -1,0 +1,18 @@
+{
+    "name": "ermitteln",
+    "version": "0.1.0",
+    "workspaces": [
+        "frontend"
+    ],
+    "scripts": {
+        "build": "npm run build --workspace=frontend",
+        "dev": "npm run dev --workspace=frontend",
+        "dev:alt": "npm run dev:alt --workspace=frontend",
+        "dev:backend": "cargo run --bin=librarian"
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.3",
+        "nuxi": "^3.10.0",
+        "nuxt": "^3.9.3"
+    }
+}

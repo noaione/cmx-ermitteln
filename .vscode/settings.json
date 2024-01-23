@@ -1,0 +1,30 @@
+{
+    "[vue]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/node_modules": true,
+        "**/.nuxt": true,
+        ".svelte-kit/**": true
+    },
+    "[javascript]": {
+        "editor.formatOnSave": true
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true
+    },
+    "editor.tabSize": 2,
+    "editor.rulers": [110],
+    "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"],
+    "[rust]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4
+    }
+}
