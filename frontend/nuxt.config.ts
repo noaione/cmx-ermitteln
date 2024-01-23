@@ -20,24 +20,9 @@ function resolvePublicConfig() {
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
-    "@nuxtjs/tailwindcss",
-    "nuxt-icon",
-    "@pinia/nuxt",
-    "@nuxtjs/google-fonts",
-    "@nuxtjs/eslint-module",
-    "@vueuse/nuxt",
-  ],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@pinia/nuxt", "@nuxtjs/eslint-module", "@vueuse/nuxt"],
   runtimeConfig: {
     public: resolvePublicConfig(),
-  },
-  googleFonts: {
-    families: {
-      Inter: true,
-      Raleway: true,
-      Incosolata: true,
-      "DM Sans": true,
-    },
   },
   app: {
     head: {
@@ -77,23 +62,6 @@ export default defineNuxtConfig({
           rel: "icon",
           href: "/favicon.ico",
           sizes: "any",
-        },
-        {
-          rel: "apple-touch-icon",
-          sizes: "180x180",
-          href: "/apple-touch-icon.png",
-        },
-        {
-          rel: "icon",
-          href: "/favicon-32x32.png",
-          type: "image/png",
-          sizes: "32x32",
-        },
-        {
-          rel: "icon",
-          href: "/favicon-16x165.png",
-          type: "image/png",
-          sizes: "16x16",
         },
       ],
     },

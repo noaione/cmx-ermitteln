@@ -1,7 +1,7 @@
 <template>
   <div ref="maxRef" class="mb-2 w-fit">
     <div :class="`disabled:cursor-not-allow toast-hitagi group toast-bord-${selectedColor} ${$props.class ?? ''}`">
-      <div v-if="title" class="text-lg font-semibold">
+      <div v-if="title" class="font-variable variation-weight-semibold text-lg">
         <span>{{ title }}</span>
         <Icon name="mdi:close" class="float-right ml-1 mt-1.5 cursor-pointer" @click="removeToast" />
       </div>

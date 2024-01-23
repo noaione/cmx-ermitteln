@@ -6,6 +6,16 @@ body {
     @apply bg-gray-900 text-white;
 }
 
+.font-roboto-mono {
+    font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@supports (font-variation-settings: normal) {
+    .font-roboto-mono {
+        font-family: 'Roboto Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+}
+
 .toast-hitagi {
     @apply border-2 bg-black px-2 py-2;
 }

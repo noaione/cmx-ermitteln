@@ -1,6 +1,6 @@
 <template>
   <div class="md:0 flex w-full flex-col gap-2 md:flex-row">
-    <div class="upload-area mx-auto mt-2 md:mr-2 md:mt-1.5">
+    <div class="upload-area mx-auto mt-2 md:mr-2">
       <label for="img-upload" class="upload-btn" :aria-disabled="loading">Upload</label>
       <input id="img-upload" type="file" accept="image/jpeg" :disabled="loading" @change="uploadImage" />
     </div>
@@ -9,25 +9,13 @@
       id="asin"
       v-model="asinQuery"
       type="text"
-      class="mt-4 w-full rounded-md bg-gray-700 px-4 py-2 text-white disabled:opacity-80 md:mt-0"
+      class="form-input mt-4 w-full border-2 border-white bg-black px-4 py-2 text-white transition focus:border-gray-500 focus:ring-0 md:mt-0"
       name="asin"
       placeholder="Put ASIN"
       :disabled="loading"
     />
-    <button
-      class="mt-2 rounded-md bg-gray-700 px-4 py-2 text-white transition hover:opacity-80 disabled:opacity-80 md:ml-2 md:mt-0"
-      :disabled="loading"
-      @click="search"
-    >
-      Search
-    </button>
-    <button
-      class="rounded-md bg-gray-700 px-4 py-2 text-white transition hover:opacity-80 disabled:opacity-80 md:ml-2"
-      :disabled="loading"
-      @click="ermitteln.search('')"
-    >
-      Reset
-    </button>
+    <button class="btn-bw-hover mt-2 md:ml-2 md:mt-0" :disabled="loading" @click="search">Search</button>
+    <button class="btn-bw-hover md:ml-2" :disabled="loading" @click="ermitteln.search('')">Reset</button>
   </div>
 </template>
 
@@ -164,19 +152,17 @@ async function search() {
 
 <style scoped lang="postcss">
 .upload-btn {
-  @apply select-none bg-cyan-700 pb-2 hover:bg-cyan-600 hover:text-gray-50 active:bg-cyan-600 disabled:opacity-80;
-  @apply rounded-md px-4 py-2 font-bold transition-colors;
+  @apply border-2 border-cyan-500 bg-transparent text-white transition hover:border-white hover:bg-cyan-600 hover:text-black;
+  @apply select-none px-4 py-2;
 }
 .upload-btn[aria-disabled="true"] {
-  @apply bg-cyan-600 disabled:opacity-80 !important;
+  @apply border-gray-300 bg-cyan-800 text-gray-200 !important;
   @apply cursor-not-allowed;
 }
 .upload-area > input[type="file"] {
   display: none;
 }
-
-.upload-url-btn {
-  @apply bg-cyan-700 hover:bg-cyan-600 hover:text-gray-50 active:bg-cyan-600 disabled:bg-cyan-600 disabled:opacity-80;
-  @apply rounded-md px-4 py-2 font-bold transition-colors;
+.btn-bw-hover {
+  @apply border-2 border-white bg-transparent px-4 py-2 text-white transition hover:bg-white hover:text-black disabled:border-gray-700 disabled:bg-gray-300 disabled:text-black disabled:hover:bg-gray-300;
 }
 </style>

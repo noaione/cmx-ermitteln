@@ -9,13 +9,13 @@
     <div class="flex flex-col py-2 text-center">
       <a
         :href="thumbnailUrl"
-        class="mx-2 mt-1 break-all text-sm text-gray-100 hover:text-gray-300 hover:underline"
+        class="font-variable variation-weight-[550] mx-2 mt-1 break-all text-sm text-gray-100 hover:text-gray-300 hover:underline"
         target="_blank"
         rel="noopener noreferer"
       >
         {{ data.id }}
       </a>
-      <div class="mx-2 mt-1 text-sm text-gray-300">
+      <div class="mx-2 mt-1 break-all text-sm text-gray-300">
         {{ data.hash }}
       </div>
     </div>

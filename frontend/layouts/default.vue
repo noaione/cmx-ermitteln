@@ -1,5 +1,5 @@
 <template>
-  <div class="font-dm-sans mx-auto flex h-full min-h-screen flex-col py-2 md:py-4 lg:py-8">
+  <div class="font-roboto-mono mx-auto flex h-full min-h-screen flex-col py-4 md:py-6 lg:py-12">
     <AppHeader />
     <main class="mx-2 md:mx-4 lg:mx-8">
       <slot />
