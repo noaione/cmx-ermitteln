@@ -56,21 +56,21 @@ async fn ingest_handler(
         .filter_map(|file| {
             let file = file.ok()?;
             let path = file.path();
-            let id_num = path.file_stem()?.to_str()?.parse::<usize>().ok()?;
-            // if id_num is less than start_id, skip
-            if id_num < start_id {
-                return None;
-            }
-            // if end_id is set, and id_num is greater than end_id, skip
-            if let Some(end_id) = end_id {
-                if id_num > end_id {
-                    return None;
-                }
-            }
 
             // check extension (jpg/jpeg only)
             let extension = path.extension()?;
             if extension == "jpg" || extension == "jpeg" {
+                let id_num = path.file_stem()?.to_str()?.parse::<usize>().ok()?;
+                // if id_num is less than start_id, skip
+                if id_num < start_id {
+                    return None;
+                }
+                // if end_id is set, and id_num is greater than end_id, skip
+                if let Some(end_id) = end_id {
+                    if id_num > end_id {
+                        return None;
+                    }
+                }
                 Some(path)
             } else {
                 None
