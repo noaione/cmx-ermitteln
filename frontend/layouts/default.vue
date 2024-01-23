@@ -4,5 +4,8 @@
     <main class="mx-2 md:mx-4 lg:mx-8">
       <slot />
     </main>
+    <div class="mt-6 text-center">
+      <NuxtLink to="/about" class="text-center text-sm text-gray-300 hover:text-gray-400">About</NuxtLink>
+    </div>
   </div>
 </template>

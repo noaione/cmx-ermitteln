@@ -4,12 +4,12 @@
     <div v-if="docCount !== undefined || docRange !== undefined" class="mt-2 text-center text-sm text-gray-300">
       <p v-if="docCount !== undefined">
         Serving
-        <span class="font-variable variation-weight-semibold text-gray-100">{{ docCount.toLocaleString() }}</span>
+        <span class="font-variable text-gray-100 variation-weight-semibold">{{ docCount.toLocaleString() }}</span>
         images
       </p>
       <p v-if="docRange !== undefined">
         ID range:
-        <span class="font-variable variation-weight-semibold text-gray-100">{{ docRange[0] }} - {{ docRange[1] }}</span>
+        <span class="font-variable text-gray-100 variation-weight-semibold">{{ docRange[0] }} - {{ docRange[1] }}</span>
       </p>
     </div>
 
@@ -20,7 +20,7 @@
         </p>
         <p
           v-if="ermitteln.data === undefined && !ermitteln.loading && !ermitteln.error"
-          class="font-variable variation-weight-light mt-4 text-center text-2xl text-gray-400"
+          class="font-variable mt-4 text-center text-2xl text-gray-400 variation-weight-light"
         >
           Start searching!
         </p>
@@ -28,7 +28,7 @@
         <div v-else-if="ermitteln.data !== undefined" class="flex w-full flex-row flex-wrap justify-center gap-4">
           <p
             v-if="ermitteln.data.length === 0"
-            class="font-variable variation-weight-light mt-4 text-center text-2xl text-gray-400"
+            class="font-variable mt-4 text-center text-2xl text-gray-400 variation-weight-light"
           >
             No results found!
           </p>
