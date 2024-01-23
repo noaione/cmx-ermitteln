@@ -8,8 +8,7 @@
         images
       </p>
       <p v-if="docRange !== undefined">
-        ID range:
-        <span class="font-variable text-gray-100 variation-weight-semibold">{{ docRange[0] }} - {{ docRange[1] }}</span>
+        Last known ID: <span class="font-variable text-gray-100 variation-weight-semibold">{{ docRange[1] }}</span>
       </p>
     </div>
 
