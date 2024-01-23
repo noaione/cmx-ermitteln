@@ -3,7 +3,7 @@ use image_hasher::{HashAlg, HasherConfig};
 use meilisearch_sdk::client::Client;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct ErmittelnHash {
     id: usize,
     hash: String,
@@ -81,11 +81,21 @@ async fn main() {
             })
         }
 
+        hashes.sort_by(|a, b| a.id.cmp(&b.id));
+        // first ID
+        let first_id = hashes.clone().first().unwrap().id;
+        let last_id = hashes.clone().last().unwrap().id;
+
         // send hashes to meilisearch
-        println!("   Sending hashes to meilisearch...");
-        ermitteln_index
-            .add_documents(&hashes, Some("id"))
+        println!(
+            "   Sending {}-{} hashes to meilisearch...",
+            first_id, last_id
+        );
+        let task = ermitteln_index
+            .add_or_replace(&hashes, Some("id"))
             .await
             .unwrap();
+        println!("    Waiting for indexing to finish...");
+        let _ = task.wait_for_completion(&client, None, None).await;
     }
 }
