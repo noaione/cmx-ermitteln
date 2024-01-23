@@ -7,13 +7,13 @@
 
     <div class="text-about mt-4 flex flex-col font-normal">
       <p>
-        A quick reverse image lookup using
+        A quick reverse image lookup using the
         <a href="https://www.phash.org/docs/design.html" target="_blank" rel="noopener noreferer">pHash (DCT)</a>
-        algorithm, made specifically for
+        algorithm, designed specifically for
         <a href="https://comixology.com" target="_blank" rel="noopener noreferer">CMX</a> cover.
       </p>
       <p class="mt-2 text-center">
-        Powered with <a href="https://www.meilisearch.com/" target="_blank" rel="noopener noreferer">Meilisearch</a>
+        Powered by <a href="https://www.meilisearch.com/" target="_blank" rel="noopener noreferer">Meilisearch</a>
       </p>
     </div>
 
