@@ -14,6 +14,8 @@ use clap::{
 #[command(author, version, about, long_about = None, styles = cli_styles())]
 #[command(propagate_version = true, disable_help_subcommand = true)]
 pub(crate) struct AufnehmenCli {
+    #[arg(short, long)]
+    pub(crate) verbose: bool,
     #[command(subcommand)]
     pub(crate) command: AufnehmenCommands,
 }

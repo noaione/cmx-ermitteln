@@ -51,6 +51,7 @@ async fn ingest_handler(
     end_id: Option<usize>,
     meili_url: String,
     meili_key: String,
+    verbose: bool,
 ) {
     println!("Starting aufnehmen indexer...");
     // get all files in folder
@@ -129,10 +130,15 @@ async fn ingest_handler(
         );
         for image_path in chunk {
             let filename = image_path.file_stem().unwrap().to_str().unwrap();
+            if verbose {
+                println!("    Reading image: {}", filename);
+            }
             let read_image = tokio::fs::read(image_path)
                 .await
                 .unwrap_or_else(|_| panic!("Failed to read image: {}", filename));
-
+            if verbose {
+                println!("     Hashing image: {}", filename);
+            }
             let hash = tokio::task::spawn_blocking(move || hash_image(&read_image)).await;
             let (hash, sha2_hash) =
                 hash.unwrap_or_else(|_| panic!("Failed to hash image: {}", filename));
@@ -208,7 +214,16 @@ async fn main() {
                 }
             };
 
-            ingest_handler(input, chunk_size, start_id, end_id, meili_url, meili_key).await;
+            ingest_handler(
+                input,
+                chunk_size,
+                start_id,
+                end_id,
+                meili_url,
+                meili_key,
+                _cli.verbose,
+            )
+            .await;
         }
     };
 }
