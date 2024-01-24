@@ -11,6 +11,17 @@
         <StatsBlock name="First known IDs" :count="docKnownIds![0]" no-animate :formatter="(n) => n.toString()" />
         <StatsBlock name="Last known IDs" :count="docKnownIds![1]" no-animate :formatter="(n) => n.toString()" />
       </div>
+      <div v-if="$config.public.dataDump" class="mt-1 text-center">
+        Data dump:
+        <a
+          :href="$config.public.dataDump"
+          target="_blank"
+          rel="noreferer noopener"
+          class="font-variable variation-weight-bold"
+        >
+          Download
+        </a>
+      </div>
       <h2 class="font-variable mt-4 text-center text-xl variation-weight-bold">Distribution</h2>
       <div class="mt-1 flex flex-row justify-center gap-2">
         <StatsBlock v-for="[key, value] of Object.entries(distributions!)" :key="key" :name="key" :count="value" />

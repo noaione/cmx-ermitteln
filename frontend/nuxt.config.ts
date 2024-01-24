@@ -17,12 +17,31 @@ function resolvePublicConfig() {
   };
 }
 
+function plausibleConfig() {
+  const domain = getEnv("PLAUSIBLE_DOMAIN") ?? getEnv("NUXT_PUBLIC_PLAUSIBLE_DOMAIN") ?? undefined;
+
+  if (!domain) {
+    return [];
+  }
+
+  const endpoint = getEnv("PLAUSIBLE_ENDPOINT") ?? getEnv("NUXT_PUBLIC_PLAUSIBLE_ENDPOINT") ?? "https://plausible.io";
+
+  return [
+    {
+      src: `${endpoint}/js/script.js`,
+      async: true,
+      defer: true,
+      "data-domain": domain,
+    },
+  ];
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@pinia/nuxt", "@nuxtjs/eslint-module", "@vueuse/nuxt"],
   runtimeConfig: {
-    public: resolvePublicConfig(),
+    public: { ...resolvePublicConfig(), dataDump: getEnv("DATA_DUMP") ?? getEnv("NUXT_PUBLIC_DATA_DUMP") ?? undefined },
   },
   // Disable SSR
   ssr: false,
@@ -66,6 +85,7 @@ export default defineNuxtConfig({
           sizes: "any",
         },
       ],
+      script: plausibleConfig(),
     },
   },
   eslint: {
