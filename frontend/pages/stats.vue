@@ -8,8 +8,8 @@
     <div v-if="!loading && !error" class="text-about mt-4 flex flex-col gap-2 font-normal">
       <div class="flex flex-row justify-center gap-2">
         <StatsBlock name="Total Documents" :count="docTotal!" />
-        <StatsBlock name="First known IDs" :count="docKnownIds![0]" no-animate />
-        <StatsBlock name="Last known IDs" :count="docKnownIds![1]" no-animate />
+        <StatsBlock name="First known IDs" :count="docKnownIds![0]" no-animate :formatter="(n) => n.toString()" />
+        <StatsBlock name="Last known IDs" :count="docKnownIds![1]" no-animate :formatter="(n) => n.toString()" />
       </div>
       <h2 class="font-variable mt-4 text-center text-xl variation-weight-bold">Distribution</h2>
       <div class="mt-1 flex flex-row justify-center gap-2">

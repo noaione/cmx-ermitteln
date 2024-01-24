@@ -4,6 +4,7 @@
       <h3 class="font-variable text-center text-lg lowercase variation-weight-bold">{{ name }}</h3>
       <p class="font-variable break-words text-center text-sm lowercase">
         <span ref="counter" />
+        <span ref="counterSpoof" class="hidden" />
       </p>
     </div>
   </div>
@@ -16,25 +17,34 @@ const props = defineProps<{
   name: string;
   count: number;
   noAnimate?: boolean;
+  formatter?: (value: number) => string;
 }>();
 
+// use double ref so we can utilize custom formatting
 const counter = ref<HTMLSpanElement>();
+const counterSpoof = ref<HTMLSpanElement>();
+
+// format the number
+const actualFormatter = props.formatter ?? ((value: number) => value.toLocaleString());
 
 onMounted(() => {
-  if (counter.value && !props.noAnimate) {
+  if (counterSpoof.value && !props.noAnimate) {
     // make 0-999 wihout commas
     // 1000+ with commas until the count
-    const innerHTML: (string | number)[] = [0, props.count];
-
     anime({
-      targets: counter.value,
-      innerHTML,
+      targets: counterSpoof.value,
+      change: (state) => {
+        if (counter.value) {
+          counter.value.innerHTML = actualFormatter(state.animations[0].currentValue as unknown as number);
+        }
+      },
+      innerHTML: [0, props.count],
       easing: "easeInOutExpo",
       round: 1,
       duration: 2500,
     });
   } else if (counter.value) {
-    counter.value.innerHTML = props.count.toLocaleString();
+    counter.value.innerHTML = actualFormatter(props.count);
   }
 });
 </script>
