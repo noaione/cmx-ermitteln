@@ -28,6 +28,7 @@ Currently in the process of ingesting old IDs (below `5xxxxx`).
 5. Install Node dependencies: `npm install`
 6. Build the frontend: `npm run build`
 7. Ingest your images into Meilisearch.
+   a. Configure your index: [Recommended Meilisearch Settings](#recommended-meilisearch-settings)
 8. Run the server: `node ./frontend/.output/server/index.mjs`
 
 ## Ingesting
@@ -55,6 +56,38 @@ This command will provide you with both the pHash and SHA-256 hash of the image.
 Duplicates usually occur when publishers use the same cover for multiple chapters of their comics, and the hashing algorithm cannot distinguish much difference.
 
 The program will not delete duplicates for you; you will need to manually remove them.
+
+### Recommended Meilisearch Settings
+
+We recommend the following settings for `ermitteln-images` index settings:
+```jsonc
+{
+  // Display all attributes (only 'id' and 'hash' are available)
+  "displayedAttributes": ["*"],
+  // Search on all attributes
+  "searchableAttributes": ["*"],
+  // Allow filtering on ID for easy bisect search
+  "filterableAttributes": ["id"],
+  // Enable sorting on ID for use in the frontend
+  "sortableAttributes": ["id"],
+  // The following are typo-tolerance settings; only the necessary values are provided
+  "typoTolerance": {
+    "enabled": true,
+    "minWordSizeForTypos": {
+      // Since the hash is 7 characters long (base64 encoded),
+      // we use the following typo tolerance
+      "oneTypo": 7, // Enable single chara typo tolerance
+      "twoTypos": 8 // Disable typo tolerance on two typos
+    },
+    // Disable typo tolerance on ID for exact matching.
+    "disableOnAttributes": ["id"]
+  }
+}
+```
+
+Everything else can be set to defaults.
+
+You can follow [Meilisearch Tutorial](https://www.meilisearch.com/docs/reference/api/settings) on how to configure your index.
 
 ## License
 
