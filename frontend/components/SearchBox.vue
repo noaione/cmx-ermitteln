@@ -154,11 +154,11 @@ async function search() {
 
 <style scoped lang="postcss">
 .upload-btn {
-  @apply border-2 border-cyan-500 bg-transparent text-white transition hover:border-white hover:bg-cyan-600 hover:text-black;
+  @apply border-2 border-purple-500 bg-transparent text-white transition hover:border-white hover:bg-purple-600;
   @apply select-none px-4 py-2;
 }
 .upload-btn[aria-disabled="true"] {
-  @apply border-gray-300 bg-cyan-800 text-gray-200 !important;
+  @apply border-gray-400 bg-purple-800 text-gray-300 !important;
   @apply cursor-not-allowed;
 }
 .upload-area > input[type="file"] {

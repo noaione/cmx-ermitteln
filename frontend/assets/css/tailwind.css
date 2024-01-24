@@ -107,3 +107,7 @@ body {
 .toast-loader-emerald {
 @apply bg-emerald-500;
 }
+
+[disabled] {
+    @apply cursor-not-allowed;
+}

@@ -9,7 +9,7 @@
     <div class="flex flex-col py-2 text-center">
       <a
         :href="thumbnailUrl"
-        class="font-variable variation-weight-[550] mx-2 mt-1 break-all text-sm text-gray-100 hover:text-gray-300 hover:underline"
+        class="font-variable mx-2 mt-1 break-all text-sm text-purple-400 variation-weight-[550] hover:text-purple-300 hover:underline"
         target="_blank"
         rel="noopener noreferer"
       >
