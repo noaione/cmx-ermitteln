@@ -24,6 +24,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: resolvePublicConfig(),
   },
+  // Disable SSR
+  ssr: false,
   app: {
     head: {
       title: "Ermitteln",
