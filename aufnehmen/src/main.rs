@@ -11,10 +11,11 @@ use crate::cli::{AufnehmenCli, AufnehmenCommands};
 
 mod cli;
 
-const BLACKLISTED_HASH: [&str; 8] = [
+const BLACKLISTED_HASH: [&str; 9] = [
     "f91cfdf3fcbfd1012c04c54b00cde53590d0936c39889964a5a452518de77d57", // Black CMX Placeholder
     "9b03356e437cabbab48270a7c3e811306cf147c589a85be101e16da8cef33275", // Black CMX Placeholder (variant)
     "dc4b594e62e54ab824c28d2686fae8a8b0397f9bbd04de4d452b9b69452ca21e", // White CMX Placeholder
+    "6a2055b188a0983162e5810266669acb0b351361b33fe3d1a65b63c3ef2d3a3f", // White CMX Placeholder (variant)
     "b7c5349d51aadf28a885de88bad7cc44f901f6401519f728c828700f4564d135", // DC Placeholder
     "5e7e7b0b37ba5c74b49f78ab913bd1b9757e68dfe73a2a3f7f27438b331df05d", // DC Placeholder (variant)
     "bf20292f29fcf8138c9ba2340921e6cd39732c71aaaa796dccf7ae0a3461ae76", // IDW Placeholder
