@@ -12,7 +12,7 @@ Powered by [Meilisearch](https://www.meilisearch.com/).
 
 https://ermitteln.ihateani.me
 
-Currently in the process of ingesting old IDs (below `102xxxx`).
+Currently in the process of ingesting old IDs (below `5xxxxx`).
 
 ## Requirements
 1. Node 18+
