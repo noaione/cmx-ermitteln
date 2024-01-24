@@ -22,13 +22,13 @@
       <div class="mt-4 flex w-[90vw] flex-row flex-wrap justify-center gap-2 md:w-[70vw] lg:w-[50vw]">
         <CreatorBlock
           name="noaione"
-          role="Developer, Hosting, & Design"
           avatar="https://avatars.githubusercontent.com/u/34302902?v=4"
+          :roles="['developer', 'designer', 'data-entry', 'host']"
         />
         <CreatorBlock
           name="neckothy"
-          role="Data Collection & Initial code"
           avatar="https://avatars.githubusercontent.com/u/109988355?v=4"
+          :roles="['idea', 'data-entry']"
         />
       </div>
     </div>
