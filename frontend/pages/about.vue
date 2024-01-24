@@ -2,7 +2,7 @@
   <hr />
   <div class="mt-2 flex flex-col items-center justify-center">
     <h2 class="font-variable mt-4 text-xl variation-weight-medium">
-      <ruby>Ermitteln<rp>(</rp><rt>/ɛɐ̯ˈmɪtl̩n/</rt><rp>)</rp></ruby>
+      <ruby>Ermitteln<rp>(</rp><rt class="mb-1 font-serif text-base">/ɛɐ̯ˈmɪtl̩n/</rt><rp>)</rp></ruby>
     </h2>
 
     <div class="text-about mt-4 flex flex-col font-normal">
@@ -44,11 +44,6 @@
 </template>
 
 <style scoped lang="postcss">
-ruby rt {
-  font-size: 0.8rem;
-  margin-bottom: 2px;
-}
-
 .text-about a {
   @apply text-purple-400 hover:text-purple-300 hover:underline;
 }
