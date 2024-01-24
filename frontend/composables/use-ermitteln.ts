@@ -1,8 +1,10 @@
 import debounce from "lodash.debounce";
+import { hamming_distance } from "ermitteln-wasm";
 
 export interface ErmittelnHash {
   id: number;
   hash: string;
+  score?: number;
 }
 
 export interface ErmittelnStats {
@@ -25,6 +27,28 @@ export const useErmitteln = defineStore("ermitteln", () => {
   const data = ref<ErmittelnHash[]>();
   const loading = ref(false);
   const error = ref<Error>();
+
+  /**
+   * Score the results based on the hamming distance to the base hash
+   * @param results The results to sort
+   * @param base The base hash to compare to
+   * @returns Sorted + scored results
+   */
+  function sortResults(results: ErmittelnHash[], base: string): ErmittelnHash[] {
+    if (!base) {
+      return results;
+    }
+
+    const resultsWithScore = results.map((result) => ({
+      ...result,
+      score: hamming_distance(base, result.hash),
+    }));
+
+    // sort by score, the lower the better
+    resultsWithScore.sort((a, b) => a.score - b.score);
+
+    return resultsWithScore;
+  }
 
   async function search(query: string) {
     loading.value = true;
@@ -55,7 +79,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
 
       const json = await response.json();
 
-      data.value = json.hits;
+      data.value = sortResults(json.hits as ErmittelnHash[], query);
     } catch (error_) {
       error.value = error_ instanceof Error ? error_ : new Error("Unknown error");
     } finally {
