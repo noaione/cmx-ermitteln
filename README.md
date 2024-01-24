@@ -1,6 +1,6 @@
 # CMX Ermitteln
 
-A quick reverse image lookup using the [pHash (DCT)] algorithm, designed specifically for CMX cover.
+A quick reverse image lookup using the [pHash (DCT)](https://www.phash.org/docs/design.html) algorithm, designed specifically for [CMX](https://comixology.com/) cover.
 
 Powered by [Meilisearch](https://www.meilisearch.com/).
 
