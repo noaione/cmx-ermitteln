@@ -5,7 +5,7 @@
       <ruby>Ermitteln<rp>(</rp><rt class="mb-1 font-serif text-base">/ɛɐ̯ˈmɪtl̩n/</rt><rp>)</rp></ruby>
     </h2>
 
-    <div class="text-about mt-4 flex flex-col font-normal">
+    <div class="text-about mt-4 flex flex-col text-center font-normal">
       <p>
         A quick reverse image lookup using the
         <a href="https://www.phash.org/docs/design.html" target="_blank" rel="noopener noreferer">pHash (DCT)</a>

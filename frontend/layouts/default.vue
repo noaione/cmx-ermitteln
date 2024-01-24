@@ -6,6 +6,8 @@
     </main>
     <div class="mt-6 text-center">
       <NuxtLink to="/about" class="text-center text-sm text-gray-300 hover:text-gray-400">About</NuxtLink>
+      |
+      <NuxtLink to="/stats" class="text-center text-sm text-gray-300 hover:text-gray-400">Stats</NuxtLink>
     </div>
   </div>
 </template>

@@ -5,6 +5,20 @@ export interface ErmittelnHash {
   hash: string;
 }
 
+export interface ErmittelnStats {
+  numberOfDocuments: number;
+  isIndexing: boolean;
+  fieldDistribution: Record<string, number>;
+}
+
+export interface ErmittelnOwnedRange {
+  indexUid: string;
+  hits: ErmittelnHash[];
+  query: string;
+  processingTimeMs: number;
+  estimatedTotalHits: number;
+}
+
 export const useErmitteln = defineStore("ermitteln", () => {
   const runtimeConfig = useRuntimeConfig();
 
@@ -49,7 +63,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
     }
   }
 
-  async function getStats() {
+  async function getStats(): Promise<ErmittelnStats> {
     try {
       const url = new URL(runtimeConfig.public.meiliHost);
 
@@ -77,7 +91,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
     }
   }
 
-  async function getOwnedRange() {
+  async function getOwnedRange(limit: number = 1): Promise<{ first: ErmittelnOwnedRange; last: ErmittelnOwnedRange }> {
     try {
       const url = new URL(runtimeConfig.public.meiliHost);
 
@@ -86,12 +100,12 @@ export const useErmitteln = defineStore("ermitteln", () => {
       const queries = [
         {
           indexUid: "ermitteln-images",
-          limit: 1,
+          limit: limit,
           sort: ["id:asc"],
         },
         {
           indexUid: "ermitteln-images",
-          limit: 1,
+          limit: limit,
           sort: ["id:desc"],
         },
       ];
@@ -111,12 +125,9 @@ export const useErmitteln = defineStore("ermitteln", () => {
 
       const json = await response.json();
 
-      const first = json.results[0].hits[0];
-      const last = json.results[1].hits[0];
-
       return {
-        first,
-        last,
+        first: json.results[0],
+        last: json.results[1],
       };
     } catch (error_) {
       console.error("Failed to get stats", error_);

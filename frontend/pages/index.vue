@@ -53,6 +53,6 @@ onMounted(async () => {
 
   const { first, last } = await ermitteln.getOwnedRange();
 
-  docRange.value = [first.id, last.id];
+  docRange.value = [first.hits[0].id, last.hits[0].id];
 });
 </script>
