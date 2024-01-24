@@ -66,11 +66,11 @@ onMounted(async () => {
   try {
     const [stats, range] = await Promise.all(promises);
 
-    docKnownIds.value = [range.first.hits[0].id, range.last.hits[range.last.hits.length - 1].id];
+    docKnownIds.value = [range.first.hits[0].id, range.last.hits[0].id];
     docTotal.value = stats.numberOfDocuments;
     distributions.value = stats.fieldDistribution;
     docRangeFirst.value = range.first.hits;
-    docRangeLast.value = range.last.hits;
+    docRangeLast.value = range.last.hits.reverse();
   } catch (error_) {
     console.error(error_);
 
