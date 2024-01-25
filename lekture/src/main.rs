@@ -101,7 +101,7 @@ fn main() {
     println!("Dumping data...");
     let dump_date = metadata.dump_date;
     // strip of the time (TXXXXXX)
-    let dump_date = &dump_date[..9];
+    let dump_date = &dump_date[..10];
     let filename = format!("lekture_{}_{}.json", index_metadata.uid, dump_date);
     println!("Writing to file: {}", filename);
     let new_file = File::create(filename);

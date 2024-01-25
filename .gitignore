@@ -7,3 +7,4 @@
 *.zip
 *.dump
 lekture_*.json
+lekture_*.tar*
