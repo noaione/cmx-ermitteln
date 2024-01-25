@@ -2,7 +2,6 @@ use std::path::PathBuf;
 
 use clap::Parser;
 use dotenv::dotenv;
-use image_hasher::{HashAlg, HasherConfig};
 use meilisearch_sdk::client::Client;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -33,26 +32,21 @@ struct ErmittelnHash {
 
 pub fn hash_image(image: &[u8]) -> (String, String) {
     let sha2_hash = <Sha256 as Digest>::digest(image);
-    let hasher = HasherConfig::new()
-        .hash_alg(HashAlg::DoubleGradient)
-        .to_hasher();
-    let img = image::load_from_memory_with_format(image, image::ImageFormat::Jpeg)
-        .expect("Failed to load image, image must be JPEG");
+    let hash = ermitteln::hash_image(image).unwrap();
 
-    let hash = hasher.hash_image(&img);
-
-    (hash.to_base64(), format!("{:x}", sha2_hash))
+    (hash, format!("{:x}", sha2_hash))
 }
 
-async fn ingest_handler(
-    input_folder: PathBuf,
+struct IngestHandler {
     chunk_size: usize,
     start_id: usize,
     end_id: Option<usize>,
     meili_url: String,
     meili_key: String,
-    verbose: bool,
-) {
+    meili_index: String,
+}
+
+async fn ingest_handler(input_folder: PathBuf, config: IngestHandler, verbose: bool) {
     println!("Starting aufnehmen indexer...");
     // get all files in folder
     let files = std::fs::read_dir(input_folder).expect("Unable to read folder.");
@@ -66,11 +60,11 @@ async fn ingest_handler(
             if extension == "jpg" || extension == "jpeg" {
                 let id_num = path.file_stem()?.to_str()?.parse::<usize>().ok()?;
                 // if id_num is less than start_id, skip
-                if id_num < start_id {
+                if id_num < config.start_id {
                     return None;
                 }
                 // if end_id is set, and id_num is greater than end_id, skip
-                if let Some(end_id) = end_id {
+                if let Some(end_id) = config.end_id {
                     if id_num > end_id {
                         return None;
                     }
@@ -109,15 +103,15 @@ async fn ingest_handler(
     );
 
     // create a client
-    let client = Client::new(&meili_url, Some(&meili_key));
+    let client = Client::new(&config.meili_url, Some(&config.meili_key));
     let version = client.get_version().await.unwrap();
     println!("Connected to Meilisearch version {:?}", version);
 
-    let ermitteln_index = client.index("ermitteln-images");
+    let ermitteln_index = client.index(config.meili_index);
 
     // chunk the images into 1000 images per chunk
     println!("Hashing a total of {} images...", jpeg_images.len());
-    let chunks = jpeg_images.chunks(chunk_size);
+    let chunks = jpeg_images.chunks(config.chunk_size);
     let total_chunk = chunks.len();
     for (idx, chunk) in chunks.enumerate() {
         // hash images
@@ -193,6 +187,7 @@ async fn main() {
             chunk_size,
             start_id,
             end_id,
+            index_name,
         } => {
             if chunk_size > 1000 {
                 println!("Chunk size cannot be greater than 1000!");
@@ -216,11 +211,14 @@ async fn main() {
 
             ingest_handler(
                 input,
-                chunk_size,
-                start_id,
-                end_id,
-                meili_url,
-                meili_key,
+                IngestHandler {
+                    chunk_size,
+                    start_id,
+                    end_id,
+                    meili_url,
+                    meili_key,
+                    meili_index: index_name,
+                },
                 _cli.verbose,
             )
             .await;

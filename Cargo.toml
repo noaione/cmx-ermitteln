@@ -2,11 +2,13 @@
 resolver = "2"
 members = [
     "aufnehmen",
+    "ermitteln",
+    "ermitteln-python",
     "ermitteln-wasm",
 ]
 
 [workspace.package]
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["noaione <noaione@n4o.xyz>"]
 license = "MIT"
@@ -15,6 +17,7 @@ repository = "https://github.com/noaione/cmx-cover"
 [workspace.dependencies]
 image_hasher = "1.1.0"
 image = { version = "0.24", default-features = false, features = ["jpeg"] }
+sha2 = "0.10.8"
 
 [profile.release]
 lto = true

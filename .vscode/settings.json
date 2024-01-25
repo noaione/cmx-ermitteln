@@ -12,6 +12,7 @@
         "**/Thumbs.db": true,
         "**/node_modules": true,
         "**/.nuxt": true,
+        "**/.venv": true,
         ".svelte-kit/**": true
     },
     "[javascript]": {
@@ -24,6 +25,10 @@
     "editor.rulers": [110],
     "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"],
     "[rust]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4
+    },
+    "[python]": {
         "editor.formatOnSave": true,
         "editor.tabSize": 4
     }

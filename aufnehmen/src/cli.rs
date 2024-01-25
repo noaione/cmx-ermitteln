@@ -40,6 +40,8 @@ pub(crate) enum AufnehmenCommands {
         /// End at ID
         #[arg(short, long)]
         end_id: Option<usize>,
+        #[arg(short, long, default_value = "ermitteln-images")]
+        index_name: String,
     },
 }
 

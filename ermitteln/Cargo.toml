@@ -1,0 +1,15 @@
+[package]
+name = "ermitteln"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "A thin-wrapper around image_hasher to compute perceptual hashes of images"
+repository.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+image_hasher.workspace = true
+image.workspace = true
+
