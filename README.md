@@ -4,15 +4,19 @@ A quick reverse image lookup using the [pHash (DCT)](https://www.phash.org/docs/
 
 Powered by [Meilisearch](https://www.meilisearch.com/).
 
-> [!NOTE]
-> I need help ingesting some missing IDs. Please contact **@noaione** on Discord so that I can provide you
-> with the ingestion key for my Meilisearch instance.
-
 ### Public Version
 
 https://ermitteln.ihateani.me
 
 Currently in the process of ingesting old IDs (below `5xxxxx`).
+
+> [!NOTE]
+> I need help ingesting some missing IDs. Please contact **@noaione** on Discord so that I can provide you
+> with the ingestion key for my Meilisearch instance.
+
+> [!NOTE]
+> Currently redoing the public search index, turns out I'm using the wrong algorithm so the rehash is currently being done.
+> When the rehash is done, the index will be swapped and the web code will be updated.
 
 ## Requirements
 1. Node 18+
