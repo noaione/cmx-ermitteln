@@ -5,6 +5,7 @@ members = [
     "ermitteln",
     "ermitteln-python",
     "ermitteln-wasm",
+    "lekture",
 ]
 
 [workspace.package]
