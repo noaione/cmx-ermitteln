@@ -1,6 +1,9 @@
 /target
 /pkg
 /node_modules
-*.zip
 .venv/
 .env/
+
+*.zip
+*.dump
+lekture_*.json

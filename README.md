@@ -8,16 +8,6 @@ Powered by [Meilisearch](https://www.meilisearch.com/).
 
 https://ermitteln.ihateani.me
 
-Currently in the process of ingesting old IDs (below `5xxxxx`).
-
-> [!NOTE]
-> I need help ingesting some missing IDs. Please contact **@noaione** on Discord so that I can provide you
-> with the ingestion key for my Meilisearch instance.
-
-> [!NOTE]
-> Currently redoing the public search index, turns out I'm using the wrong algorithm so the rehash is currently being done.
-> When the rehash is done, the index will be swapped and the web code will be updated.
-
 ## Requirements
 1. Node 18+
 2. Rust 1.72+
@@ -28,6 +18,7 @@ Currently in the process of ingesting old IDs (below `5xxxxx`).
 1. Clone this repository.
 2. Install Node, Rust, Meilisearch, and wasm-pack.
 3. Build cargo crates: `cargo build --release --all`
+   a. You should always build as release since `aufnehment` hashing will be slow without optimization
 4. Build the WASM package: `wasm-pack build ermitteln-wasm --target web`
 5. Install Node dependencies: `npm install`
 6. Build the frontend: `npm run build`

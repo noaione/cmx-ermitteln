@@ -19,7 +19,7 @@
           rel="noreferer noopener"
           class="font-variable variation-weight-bold"
         >
-          Download
+          {{ formatFilename($config.public.dataDump) }}
         </a>
       </div>
       <h2 class="font-variable mt-4 text-center text-xl variation-weight-bold">Distribution</h2>
@@ -67,6 +67,17 @@ const distributions = ref<Record<string, number>>();
 
 const docRangeFirst = ref<ErmittelnHash[]>();
 const docRangeLast = ref<ErmittelnHash[]>();
+
+function formatFilename(uri: string) {
+  try {
+    const fileUrl = new URL(uri);
+
+    // get last part of url
+    return fileUrl.pathname.split("/").pop() ?? "Download";
+  } catch {
+    return "Download";
+  }
+}
 
 onMounted(async () => {
   const promises: [Promise<ErmittelnStats>, Promise<{ first: ErmittelnOwnedRange; last: ErmittelnOwnedRange }>] = [

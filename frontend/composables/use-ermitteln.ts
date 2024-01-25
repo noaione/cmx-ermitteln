@@ -1,6 +1,8 @@
 import debounce from "lodash.debounce";
 import { hamming_distance } from "ermitteln-wasm";
 
+const INDEX_NAME = "ermitteln-images";
+
 export interface ErmittelnHash {
   id: number;
   hash: string;
@@ -56,7 +58,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
     try {
       const url = new URL(runtimeConfig.public.meiliHost);
 
-      url.pathname = "/indexes/ermitteln-images/search";
+      url.pathname = `/indexes/${INDEX_NAME}/search`;
 
       const jsonBody: Record<string, string | string[] | number> = {
         q: query,
@@ -91,7 +93,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
     try {
       const url = new URL(runtimeConfig.public.meiliHost);
 
-      url.pathname = "/indexes/ermitteln-images/stats";
+      url.pathname = `/indexes/${INDEX_NAME}/stats`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -123,12 +125,12 @@ export const useErmitteln = defineStore("ermitteln", () => {
 
       const queries = [
         {
-          indexUid: "ermitteln-images",
+          indexUid: INDEX_NAME,
           limit: limit,
           sort: ["id:asc"],
         },
         {
-          indexUid: "ermitteln-images",
+          indexUid: INDEX_NAME,
           limit: limit,
           sort: ["id:desc"],
         },
