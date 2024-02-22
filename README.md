@@ -17,13 +17,13 @@ https://ermitteln.ihateani.me
 ## Installation
 1. Clone this repository.
 2. Install Node, Rust, Meilisearch, and wasm-pack.
-3. Build cargo crates: `cargo build --release --all`
-   a. You should always build as release since `aufnehment` hashing will be slow without optimization
+3. Build cargo crates: `cargo build --release --all`<br />
+   You should always build as release since `aufnehmen` hashing will be slow without optimization
 4. Build the WASM package: `wasm-pack build ermitteln-wasm --target web`
 5. Install Node dependencies: `npm install`
 6. Build the frontend: `npm run build`
-7. Ingest your images into Meilisearch.
-   a. Configure your index: [Recommended Meilisearch Settings](#recommended-meilisearch-settings)
+7. Ingest your images into Meilisearch.<br />
+   Configure your index: [Recommended Meilisearch Settings](#recommended-meilisearch-settings)
 8. Run the server: `node ./frontend/.output/server/index.mjs`
 
 ## Ingesting

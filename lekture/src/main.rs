@@ -1,11 +1,12 @@
 use core::panic;
 use std::{
     fs::File,
-    io::{prelude::*, BufReader},
+    io::{prelude::*, BufReader, BufWriter},
     path::PathBuf,
 };
 
 use flate2::bufread::GzDecoder;
+use flate2::write::GzEncoder;
 use models::{DumpMetadata, IndexMetadata};
 use serde::Serialize;
 use tempfile::TempDir;
@@ -101,10 +102,10 @@ fn main() {
     println!("Dumping data...");
     let dump_date = metadata.dump_date;
     // strip of the time (TXXXXXX)
-    let dump_date = &dump_date[..10];
+    let dump_date = &dump_date[0..10];
     let filename = format!("lekture_{}_{}.json", index_metadata.uid, dump_date);
     println!("Writing to file: {}", filename);
-    let new_file = File::create(filename);
+    let new_file = File::create(&filename);
     let mut new_file = match new_file {
         Ok(file) => file,
         Err(e) => panic!("Could not create file: {}", e),
@@ -115,4 +116,18 @@ fn main() {
         Ok(_) => println!("Successfully wrote to file"),
         Err(e) => panic!("Could not write to file: {}", e),
     }
+
+    // Package as tar gunzip
+    let target = format!("lekture_{}_{}.tar.gz", index_metadata.uid, dump_date);
+    let target_fp = File::create(&target).expect("Could not create target file");
+    let target_buf = BufWriter::new(target_fp);
+    let gz_builder = GzEncoder::new(target_buf, flate2::Compression::best());
+    let mut target_tar = tar::Builder::new(gz_builder);
+
+    let mut json_open = File::open(&filename).expect("Could not open file");
+    target_tar
+        .append_file(&filename, &mut json_open)
+        .expect("Unable to append file");
+
+    target_tar.finish().expect("Could not finish tarball");
 }
