@@ -9,3 +9,5 @@
 lekture_*.json
 lekture_*.tar*
 ermitteln-*.tar*
+missing_ids.txt
+blacklisted_ids.txt
