@@ -11,9 +11,9 @@ repository.workspace = true
 
 [dependencies]
 meilisearch-sdk = "0.25.0"
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0.197", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
 dotenv = "0.15.0"
-clap = { version = "*", features = ["derive"] }
+clap = { version = "4.5.3", features = ["derive"] }
 ermitteln = { path = "../ermitteln" }
 sha2 = { workspace = true }

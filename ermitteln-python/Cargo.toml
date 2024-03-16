@@ -10,9 +10,8 @@ repository.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# Import ermitteln and not include default features (sha2)
 ermitteln = { path = "../ermitteln" }
-pyo3 = { version = "0.20.2", features = ["extension-module"] }
+pyo3 = { version = "0.20.3", features = ["extension-module"] }
 
 [lib]
 name = "ermitteln"

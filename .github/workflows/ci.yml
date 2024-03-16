@@ -45,6 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aufnehmen-${{ matrix.os[1] }}
+          name: cmx-ermitteln-${{ matrix.os[1] }}
           path: |
             target/${{ matrix.os[1] }}/release/aufnehmen*
+            target/${{ matrix.os[1] }}/release/lekture*
