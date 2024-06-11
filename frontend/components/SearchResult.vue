@@ -18,6 +18,12 @@
       <div class="mx-2 mt-1 break-all text-sm text-gray-300">
         {{ data.hash }}
       </div>
+      <div
+        v-if="data.asin !== undefined"
+        class="font-variable mx-2 mb-1 mt-0.5 break-all text-xs text-gray-300 variation-weight-bold"
+      >
+        {{ data.asin }}
+      </div>
       <div v-if="data.score !== undefined" class="mx-2 mb-1 mt-0.5 text-xs text-gray-300">
         Diff: <span class="font-variable text-gray-200 variation-weight-bold">{{ data.score }}</span>
       </div>

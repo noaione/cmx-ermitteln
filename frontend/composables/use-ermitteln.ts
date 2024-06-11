@@ -1,4 +1,5 @@
 import debounce from "lodash.debounce";
+import uniqBy from "lodash.uniqby";
 import { hamming_distance } from "ermitteln-wasm";
 
 const INDEX_NAME = "ermitteln-images";
@@ -7,6 +8,7 @@ export interface ErmittelnHash {
   id: number;
   hash: string;
   score?: number;
+  asin?: string;
 }
 
 export interface ErmittelnStats {
@@ -52,19 +54,37 @@ export const useErmitteln = defineStore("ermitteln", () => {
     return resultsWithScore;
   }
 
-  async function search(query: string) {
+  async function search(query: string, asin?: string) {
     loading.value = true;
 
     try {
       const url = new URL(runtimeConfig.public.meiliHost);
 
-      url.pathname = `/indexes/${INDEX_NAME}/search`;
+      url.pathname = `/multi-search`;
 
-      const jsonBody: Record<string, string | string[] | number> = {
-        q: query,
-        page: 1,
-        hitsPerPage: 30,
-      };
+      const queries: {
+        indexUid: string;
+        q?: string;
+        filter?: string[];
+        page: number;
+        hitsPerPage: number;
+      }[] = [
+        {
+          indexUid: INDEX_NAME,
+          q: query,
+          page: 1,
+          hitsPerPage: 30,
+        },
+      ];
+
+      if (asin) {
+        queries.push({
+          indexUid: INDEX_NAME,
+          filter: [`asin = ${asin}`],
+          page: 1,
+          hitsPerPage: 2,
+        });
+      }
 
       const response = await fetch(url, {
         method: "POST",
@@ -72,7 +92,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${runtimeConfig.public.meiliKey}`,
         },
-        body: JSON.stringify(jsonBody),
+        body: JSON.stringify({ queries }),
       });
 
       if (!response.ok) {
@@ -81,7 +101,10 @@ export const useErmitteln = defineStore("ermitteln", () => {
 
       const json = await response.json();
 
-      data.value = sortResults(json.hits as ErmittelnHash[], query);
+      // merge the hits from both queries
+      const mergedHits = [...json.results[0].hits, ...(json.results[1]?.hits || [])] as ErmittelnHash[];
+
+      data.value = sortResults(uniqBy(mergedHits, "id"), query);
     } catch (error_) {
       error.value = error_ instanceof Error ? error_ : new Error("Unknown error");
     } finally {

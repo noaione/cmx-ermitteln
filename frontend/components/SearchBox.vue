@@ -148,7 +148,7 @@ async function search() {
     return;
   }
 
-  await ermitteln.search(hashData);
+  await ermitteln.search(hashData, asinQuery.value);
 }
 </script>
 
