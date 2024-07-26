@@ -25,13 +25,16 @@ function plausibleConfig() {
   }
 
   const endpoint = getEnv("PLAUSIBLE_ENDPOINT") ?? getEnv("NUXT_PUBLIC_PLAUSIBLE_ENDPOINT") ?? "https://plausible.io";
+  const dataApi = getEnv("PLAUSIBLE_API_ENDPOINT");
+  const pfJs = getEnv("PLAUSIBLE_FULL_JS");
 
   return [
     {
-      src: `${endpoint}/js/script.js`,
+      src: pfJs ?? `${endpoint}/js/script.js`,
       async: true,
       defer: true,
       "data-domain": domain,
+      ...(dataApi ? {"data-api": dataApi} : {}),
     },
   ];
 }
