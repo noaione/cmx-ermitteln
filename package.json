@@ -8,6 +8,7 @@
         "preinstall": "python scripts/download-assets.py",
         "build": "npm run build --workspace=frontend",
         "dev": "npm run dev --workspace=frontend",
+        "generate": "npm run generate --workspace=frontend",
         "dev:alt": "npm run dev:alt --workspace=frontend",
         "dev:backend": "cargo run --bin=librarian"
     },

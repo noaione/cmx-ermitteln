@@ -5,9 +5,10 @@ from zipfile import ZipFile
 
 cf_pages = os.getenv("CF_PAGES")
 vercel = os.getenv("VERCEL")
+gh_runner = os.getenv(key="CI")
 
 # Check if we are in the CI
-if cf_pages is None and vercel is None:
+if cf_pages is None and vercel is None and gh_runner is None:
     print("This script should only be run in CI")
     sys.exit(0)
 
