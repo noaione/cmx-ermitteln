@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "preinstall": "python ../scripts/download-assets.py",
     "build": "nuxt build",
     "dev": "nuxt dev --host 127.0.0.1 --port 5120",
     "generate": "nuxt generate",
