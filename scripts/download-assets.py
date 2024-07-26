@@ -1,6 +1,15 @@
 import os
+import sys
 from pathlib import Path
 from zipfile import ZipFile
+
+cf_pages = os.getenv("CF_PAGES")
+vercel = os.getenv("VERCEL")
+
+# Check if we are in the CI
+if cf_pages is None and vercel is None:
+    print("This script should only be run in CI")
+    sys.exit(0)
 
 CURRENT_DIR = Path(__file__).parent.parent.absolute()
 VERSION = "0.1.3"
