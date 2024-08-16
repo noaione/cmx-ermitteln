@@ -30,6 +30,8 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run generate
+        env:
+          DATA_DUMP: ${{ vars.DATA_DUMP }}
       - name: Copy assets contents
         run: |
           touch ./frontend/.output/public/.nojekyll
