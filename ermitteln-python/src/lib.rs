@@ -28,5 +28,9 @@ fn hamming_distance(hash1: &str, hash2: &str) -> PyResult<u32> {
 fn ermitteln_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(hash_image, m)?)?;
     m.add_function(wrap_pyfunction!(hamming_distance, m)?)?;
+
+    // Metadata
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
+
     Ok(())
 }

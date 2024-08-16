@@ -7,6 +7,8 @@ A thin-wrapper around Rust image_hasher to hash images and compare them.
 :license: MIT, see LICENSE for more details.
 """
 
+__version__: str
+
 def hash_image(image: bytes) -> str:
     """Hashes an image and returns the hash as a base64 encoded string
 

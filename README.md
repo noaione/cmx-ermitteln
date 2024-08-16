@@ -12,19 +12,23 @@ https://ermitteln.ihateani.me
 1. Node 18+
 2. Rust 1.72+
 3. Meilisearch instance
-4. wasm-pack
+4. wasm-pack (for building the WASM bindings)
+5. maturin (for building the Python bindings)
 
 ## Installation
 1. Clone this repository.
 2. Install Node, Rust, Meilisearch, and wasm-pack.
 3. Build cargo crates: `cargo build --release --all`<br />
    You should always build as release since `aufnehmen` hashing will be slow without optimization
-4. Build the WASM package: `wasm-pack build ermitteln-wasm --target web`
-5. Install Node dependencies: `npm install`
-6. Build the frontend: `npm run build`
-7. Ingest your images into Meilisearch.<br />
+4. Build the bindings:
+   - WASM/JS: `wasm-pack build ermitteln-wasm --release --target web`
+   - Python 3: `maturin build --release --strip --sdist --manifest-path ./ermitteln-python/Cargo.toml`
+5. Build the WASM package: `wasm-pack build ermitteln-wasm --release --target web`
+6. Install Node dependencies: `npm install`
+7. Build the frontend: `npm run build`
+8. Ingest your images into Meilisearch.<br />
    Configure your index: [Recommended Meilisearch Settings](#recommended-meilisearch-settings)
-8. Run the server: `node ./frontend/.output/server/index.mjs`
+9.  Run the server: `node ./frontend/.output/server/index.mjs`
 
 ## Ingesting
 You would need to download CMX cover into a folder; we are expecting a specific filename like this: `CmxID.jpg`
