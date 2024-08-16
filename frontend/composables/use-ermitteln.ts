@@ -25,6 +25,13 @@ export interface ErmittelnOwnedRange {
   estimatedTotalHits: number;
 }
 
+export interface MeilisearchIndex {
+  uid: string;
+  createdAt: string;
+  updatedAt: string;
+  primaryKey: string;
+}
+
 export const useErmitteln = defineStore("ermitteln", () => {
   const runtimeConfig = useRuntimeConfig();
 
@@ -185,6 +192,32 @@ export const useErmitteln = defineStore("ermitteln", () => {
     }
   }
 
+  async function getIndexInfo(): Promise<MeilisearchIndex> {
+    try {
+      const url = new URL(runtimeConfig.public.meiliHost);
+
+      url.pathname = `/indexes/${INDEX_NAME}`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${runtimeConfig.public.meiliKey}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`MeiliSearch returned ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error_) {
+      console.error("Failed to get index info", error_);
+
+      throw error_;
+    }
+  }
+
   const searchDebounced = debounce(search, 500);
 
   return {
@@ -192,6 +225,7 @@ export const useErmitteln = defineStore("ermitteln", () => {
     searchDebounced,
     getStats,
     getOwnedRange,
+    getIndexInfo,
     loading,
     data,
     error,
