@@ -10,10 +10,10 @@ repository.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-meilisearch-sdk = "0.25.0"
-serde = { version = "1.0.197", features = ["derive"] }
+meilisearch-sdk = "0.27.1"
+serde = { version = "1.0.208", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
-dotenv = "0.15.0"
-clap = { version = "4.5.3", features = ["derive"] }
+dotenvy = "0.15.7"
+clap = { version = "4.5.16", features = ["derive"] }
 ermitteln = { path = "../ermitteln" }
 sha2 = { workspace = true }

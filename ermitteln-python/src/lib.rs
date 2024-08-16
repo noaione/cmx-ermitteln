@@ -24,7 +24,8 @@ fn hamming_distance(hash1: &str, hash2: &str) -> PyResult<u32> {
 
 /// A thin-wrapper around image_hasher to make it usable in Python.
 #[pymodule]
-fn ermitteln(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+#[pyo3(name = "ermitteln")]
+fn ermitteln_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(hash_image, m)?)?;
     m.add_function(wrap_pyfunction!(hamming_distance, m)?)?;
     Ok(())

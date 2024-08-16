@@ -1,6 +1,4 @@
 use image_hasher::{HashAlg, Hasher, HasherConfig};
-#[cfg(feature = "sha2")]
-use sha2::{Digest, Sha256};
 
 /// Create a new instance of Hasher
 ///

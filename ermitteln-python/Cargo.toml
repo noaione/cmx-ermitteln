@@ -11,7 +11,7 @@ repository.workspace = true
 
 [dependencies]
 ermitteln = { path = "../ermitteln" }
-pyo3 = { version = "0.20.3", features = ["extension-module"] }
+pyo3 = { version = "0.22.2", features = ["extension-module"] }
 
 [lib]
 name = "ermitteln"

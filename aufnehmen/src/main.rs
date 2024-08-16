@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use clap::Parser;
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use meilisearch_sdk::client::Client;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -105,7 +105,7 @@ async fn ingest_handler(input_folder: PathBuf, config: IngestHandler, verbose: b
     );
 
     // create a client
-    let client = Client::new(&config.meili_url, Some(&config.meili_key));
+    let client = Client::new(&config.meili_url, Some(&config.meili_key)).unwrap();
     let version = client.get_version().await.unwrap();
     println!("Connected to Meilisearch version {:?}", version);
 
