@@ -22,13 +22,12 @@ https://ermitteln.ihateani.me
    You should always build as release since `aufnehmen` hashing will be slow without optimization
 4. Build the bindings:
    - WASM/JS: `wasm-pack build ermitteln-wasm --release --target web`
-   - Python 3: `maturin build --release --strip --sdist --manifest-path ./ermitteln-python/Cargo.toml`
-5. Build the WASM package: `wasm-pack build ermitteln-wasm --release --target web`
+   - Python 3: `maturin build --release --strip --sdist --manifest-path ./ermitteln-python/Cargo.toml` (optional)
 6. Install Node dependencies: `npm install`
-7. Build the frontend: `npm run build`
+7. Build the frontend: `npm run build` or `npm run generate`
 8. Ingest your images into Meilisearch.<br />
    Configure your index: [Recommended Meilisearch Settings](#recommended-meilisearch-settings)
-9.  Run the server: `node ./frontend/.output/server/index.mjs`
+9.  Run the server: `node ./frontend/.output/server/index.mjs` or host the `dist` folder if using `generate`
 
 ## Ingesting
 You would need to download CMX cover into a folder; we are expecting a specific filename like this: `CmxID.jpg`
